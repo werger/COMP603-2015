@@ -21,40 +21,41 @@ git push -u --all origin
 == Questions
 
 What is the difference between a set, a bag, and a sequence?
-
+Not entirely sure, was hoping you could teach me.
 
 What is a language (in terms of sets and sequences)?
-
+Language is a way too communicate with the hardware.
 
 What is a compiler? Name some.
-
+compilers turn code into machine code.
 
 What is an interpreter? How does that differ from a compiler?
-
+And interpreter makes code applicable to the system.
 
 What is the derivative of a language?
-
+Integral
 
 What is a regular expression?
-
+A regular expression has no loose ends or variables.
 
 What is a finite automaton, and what is the difference between an NFA and a DFA?
-
+Finite automation is the process of definitively running tests to make sure your programs work.
 
 What is a grammar, and what is the difference between regular grammars, context-free grammars, LL(k) and LR(k)?
-
+Grammar is the process to make sure that phrases and words are written correctly.
 
 What is the difference between derivative parsing, recursive-descent parsing, shift-reduce parsing and parser combinators?
-
+not sure
 
 What is a visitor?
-
+not sure.
 
 What is the difference between a parse tree and an abstract syntax tree?
-
+not sure.
 
 Name some optimizations.
-
+Not sure.
 
 What questions do you have for me?
+Are you going to be expaining most of this?
 
