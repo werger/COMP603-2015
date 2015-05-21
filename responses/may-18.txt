@@ -1,6 +1,7 @@
 What does it mean for two sets to be disjoint?
 
-
+Can I buy a vowel?
 
 What is the union of two sets?
 
+The union of two sets is the elements that are included in both sets.

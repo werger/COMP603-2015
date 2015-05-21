@@ -1,0 +1,47 @@
+Ryan Werge
+Comp 603
+May 18, 2015
+
+Lab 1: C# Compiler and Runtime
+
+2. Files responsible for:
+Scan/Lex/Tokenize
+-Mcs/mcs/cs-tokenizer.cs
+
+Parse
+-Driver.cs
+-Cs-parser.cs
+-Cs-parser.jay
+
+AST
+-Statement.cs
+-Expression.cs
+-Visit.cs	
+
+Code Generation
+-Mcs/mcs/codegen.cs
+-EmitContext
+-CheckState
+-ConstantCheckState
+-IsStatic
+-ReturnType
+-ReturnLabel
+-HasReturnLabel
+-ContainerType
+-IsConstructor
+-CurrentBlock
+-ReturnLabel;
+-Attribute.cs
+
+
+3. Most Ridiculous Thing Found: 
+-Code was compiled three different ways before appearing in C#.
+
+4. Notes
+-Specific classes to parse each syntax word such as method, interface, delegate, anonymous, etc.
+-Class to parse lambda expressions 雾务 lambda.cs
+-Class to parse LINQ query expressions 雾务 linq.cs
+-Class to hold location of expressions in source code 雾务 location.cs
+-Class to report errors and warnings 雾务 report.cs
+-Class to parse options when running compiler 雾务 settings.cs
+
