@@ -113,6 +113,10 @@ void parse(fstream & file, Program * program) {
     cout << c;
     // How to insert a node into the program.
     program->children.push_back(new CommandNode(c));
+    // call parse recusrively if '[' is found
+
+
+
 }
 
 /**
