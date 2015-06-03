@@ -73,11 +73,18 @@ class CommandNode : public Node {
         }
 };
 
+<<<<<<< HEAD
 class Container : public Node{
 public:
 	vector<Node*> children;
 	virtual void accept(Visitor * v) = 0;
 
+=======
+class Container: public Node {
+    public:
+        vector<Node*> children;
+        virtual void accept (Visitor * v) = 0;
+>>>>>>> upstream/master
 };
 
 /**
@@ -141,12 +148,17 @@ void parse(fstream & file, Container * container) {
     file >> c;
     // How to print out that character
     cout << c;
+<<<<<<< HEAD
     // How to insert a node into the program.
     program->children.push_back(new CommandNode(c));
     // call parse recusrively if '[' is found
 	*/
 
 
+=======
+    // How to insert a node into the container.
+    container->children.push_back(new CommandNode(c));
+>>>>>>> upstream/master
 }
 
 /**
@@ -177,13 +189,46 @@ class Printer : public Visitor {
             for (vector<Node*>::const_iterator it = program->children.begin(); it != program->children.end(); ++it) {
                 (*it)->accept(this);
             }
+            cout << '\n';
         }
 };
+
+class Compiler : public Visitor {
+    public:
+        void visit(const CommandNode * leaf) {
+            switch (leaf->command) {
+                case INCREMENT:   cout << "++*ptr;\n"; break;
+                case DECREMENT:   cout << "--*ptr;\n"; break;
+                case SHIFT_LEFT:  cout << "--ptr;\n"; break;
+                case SHIFT_RIGHT: cout << "++ptr;\n"; break;
+                case INPUT:       cout << "*ptr=getchar();\n"; break;
+                case OUTPUT:      cout << "putchar(*ptr);\n"; break;
+            }
+        }
+        void visit(const Loop * loop) {
+            cout << "while (*ptr) {";
+            for (vector<Node*>::const_iterator it = loop->children.begin(); it != loop->children.end(); ++it) {
+                (*it)->accept(this);
+            }
+            cout << "}";
+        }
+        void visit(const Program * program) {
+            cout << "#include <stdio.h>\n";
+            cout << "char array[30000] = {0};\n";
+            cout << "char *ptr=array;\n";
+            cout << "int main(int argc, char **argv) {\n"
+            for (vector<Node*>::const_iterator it = program->children.begin(); it != program->children.end(); ++it) {
+                (*it)->accept(this);
+            }
+            cout << "}\n";
+        }
+};
+
 
 int main(int argc, char *argv[]) {
     fstream file;
     Program program;
-    Printer printer;
+    Compiler printer;
     if (argc == 1) {
         cout << argv[0] << ": No input files." << endl;
     } else if (argc > 1) {
