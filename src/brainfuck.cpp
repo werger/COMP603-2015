@@ -73,18 +73,10 @@ class CommandNode : public Node {
         }
 };
 
-//<<<<<<< HEAD
 class Container : public Node{
 public:
 	vector<Node*> children;
 	virtual void accept(Visitor * v) = 0;
-
-//=======
-class Container: public Node {
-    public:
-        vector<Node*> children;
-        virtual void accept (Visitor * v) = 0;
-//>>>>>>> upstream/master
 };
 
 /**
@@ -139,26 +131,6 @@ void parse(fstream & file, Container * container) {
 			return;
 		}
 	}
-	/*}
-    // How to peek at the next character
-    c = (char)file.peek();
-    // How to print out that character
-    cout << c;
-    // How to read a character from the file and advance to the next character
-    file >> c;
-    // How to print out that character
-    cout << c;
-<<<<<<< HEAD
-    // How to insert a node into the program.
-    program->children.push_back(new CommandNode(c));
-    // call parse recusrively if '[' is found
-	*/
-
-
-//=======
-    // How to insert a node into the container.
-    container->children.push_back(new CommandNode(c));
-//>>>>>>> upstream/master
 }
 
 /**
@@ -194,33 +166,43 @@ class Printer : public Visitor {
 };
 
 class Interpreter : public Visitor {
-    char memory[30000];
-    int pointer;
-    public:
+	char memory[30000];
+	int pointer;
+public:
         void visit(const CommandNode * leaf) {
             switch (leaf->command) {
-                case INCREMENT:
+			case INCREMENT: 
+					memory[pointer]++;
                     break;
                 case DECREMENT:
+					memory[pointer]--;
                     break;
                 case SHIFT_LEFT:
+					pointer--;
                     break;
                 case SHIFT_RIGHT:
+					pointer++;
                     break;
                 case INPUT:
+					cin.get(memory[pointer]);
                     break;
                 case OUTPUT:
+					cout << memory[pointer];
                     break;
             }
         }
         void visit(const Loop * loop) {
-            for (vector<Node*>::const_iterator it = loop->children.begin(); it != loop->children.end(); ++it) {
-                (*it)->accept(this);
-            }
+			while (memory[pointer] != 0){
+				for (vector<Node*>::const_iterator it = loop->children.begin(); it != loop->children.end(); ++it) {
+					(*it)->accept(this);
+				}
+			}
         }
-        void visit(const Program * program) {
-            // zero init the memory array
-            // set pointer to zero
+		void visit(const Program * program) {
+			// zero init the memory array
+			// set pointer to zero
+			memset(memory, 0, sizeof(memory));
+			pointer = 0;
             for (vector<Node*>::const_iterator it = program->children.begin(); it != program->children.end(); ++it) {
                 (*it)->accept(this);
             }
