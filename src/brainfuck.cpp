@@ -73,18 +73,18 @@ class CommandNode : public Node {
         }
 };
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 class Container : public Node{
 public:
 	vector<Node*> children;
 	virtual void accept(Visitor * v) = 0;
 
-=======
+//=======
 class Container: public Node {
     public:
         vector<Node*> children;
         virtual void accept (Visitor * v) = 0;
->>>>>>> upstream/master
+//>>>>>>> upstream/master
 };
 
 /**
@@ -155,10 +155,10 @@ void parse(fstream & file, Container * container) {
 	*/
 
 
-=======
+//=======
     // How to insert a node into the container.
     container->children.push_back(new CommandNode(c));
->>>>>>> upstream/master
+//>>>>>>> upstream/master
 }
 
 /**
