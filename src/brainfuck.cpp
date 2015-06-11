@@ -24,7 +24,8 @@ typedef enum {
     SHIFT_LEFT, // <
     SHIFT_RIGHT, // >
     INPUT, // ,
-    OUTPUT // .
+    OUTPUT, // .
+	ZERO // 0
 } Command;
 
 // Forward references. Silly C++!
@@ -58,7 +59,8 @@ class Node {
 class CommandNode : public Node {
     public:
         Command command;
-        CommandNode(char c) {
+		int count;
+        CommandNode(char c, int n) {
             switch(c) {
                 case '+': command = INCREMENT; break;
                 case '-': command = DECREMENT; break;
@@ -66,7 +68,9 @@ class CommandNode : public Node {
                 case '>': command = SHIFT_RIGHT; break;
                 case ',': command = INPUT; break;
                 case '.': command = OUTPUT; break;
+				case '0': command = ZERO; break;
             }
+		count = n;
         }
         void accept (Visitor * v) {
             v->visit(this);
@@ -108,6 +112,7 @@ class Program : public Container {
 void parse(fstream & file, Container * container) {
     char c;
 	Loop *loop;
+	int multiples;
 
 	while (file >> c)
 	{
@@ -118,13 +123,33 @@ void parse(fstream & file, Container * container) {
 		case '<':
 		case '>':
 		case ',':
-		case '.':container->children.push_back(new CommandNode(c));
-		break;
+		case '.':
+			multiples = 1;
+			while (file.peek() == c){
+				multiples++;
+				file >> c;
+			}
+				container->children.push_back(new CommandNode(c, multiples));
+				break;	
 		case '[':
 			{
 			loop = new Loop();
-			container->children.push_back(loop);
 			parse(file, loop);
+			if (loop->children.size() == 1)
+			{
+				CommandNode*leaf = (CommandNode*)loop->children[0];
+				if (leaf->command == '+' || leaf->command == '-')
+				{
+					container->children.push_back(new CommandNode('0', 1));
+					break;
+				}
+				else
+				{
+					container->children.push_back(loop);
+					break;
+				}
+			}
+			container->children.push_back(loop);
 			break;
 			}
 		case ']':
@@ -141,14 +166,17 @@ void parse(fstream & file, Container * container) {
 class Printer : public Visitor {
     public:
         void visit(const CommandNode * leaf) {
-            switch (leaf->command) {
-                case INCREMENT:   cout << '+'; break;
-                case DECREMENT:   cout << '-'; break;
-                case SHIFT_LEFT:  cout << '<'; break;
-                case SHIFT_RIGHT: cout << '>'; break;
-                case INPUT:       cout << ','; break;
-                case OUTPUT:      cout << '.'; break;
-            }
+			for (int i = 0; i < leaf->count; i++){
+				switch (leaf->command) {
+				case INCREMENT:   cout << '+'; break;
+				case DECREMENT:   cout << '-'; break;
+				case SHIFT_LEFT:  cout << '<'; break;
+				case SHIFT_RIGHT: cout << '>'; break;
+				case INPUT:       cout << ','; break;
+				case OUTPUT:      cout << '.'; break;
+				case ZERO:		  cout << '0'; break;
+				}
+			}
         }
         void visit(const Loop * loop) {
             cout << '[';
@@ -172,23 +200,35 @@ public:
         void visit(const CommandNode * leaf) {
             switch (leaf->command) {
 			case INCREMENT: 
-					memory[pointer]++;
+					memory[pointer]+= leaf->count;
                     break;
                 case DECREMENT:
-					memory[pointer]--;
+					memory[pointer]-= leaf->count;
                     break;
                 case SHIFT_LEFT:
-					pointer--;
+					pointer-= leaf->count;
                     break;
                 case SHIFT_RIGHT:
-					pointer++;
+					pointer+= leaf->count;
                     break;
                 case INPUT:
-					cin.get(memory[pointer]);
-                    break;
+					for (int i = 0; i < leaf->count; i++)
+					{
+						cin.get(memory[pointer]);
+					}
+					break;
                 case OUTPUT:
-					cout << memory[pointer];
-                    break;
+					for (int i = 0; i < leaf->count; i++)
+					{
+						cout << memory[pointer];
+					}
+					break;
+				case ZERO:
+					for (int i = 0; i < leaf->count; i++)
+					{
+						cout << "[+]";
+					}
+					break;
             }
         }
         void visit(const Loop * loop) {
