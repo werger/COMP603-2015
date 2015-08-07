@@ -1,0 +1,33 @@
+to compile evaluation.c use
+****************************
+
+cc -std=c99 -Wall evaluation.c mpc.c -o evaluation
+
+****************************
+
+Mpc.h and mpc.c are source files for use as you will.
+
+
+Evaluation.c runs through the AST for Polish Notation and will evaluate the 
+polish notation that the user enters 
+
+polish notation example:
+
++ 1 2 3 == 1 + 2 + 3 
+
++ 6 (* 2 9) == 6 + (2 * 9)
+
+/ (* 10 2) (+ 4 2) == (10 * 2) / (4 + 2)
+
+
+
+
+****************************
+
+Program	-   the start of input, an Operator, one or more Expression, and the end of input.
+
+Expression -   either a Number or '(', an Operator, one or more Expression, and an ')'.
+
+Operator -   '+', '-', '*', or '/'.
+
+Number -   an optional -, and one or more characters between 0 and 9
